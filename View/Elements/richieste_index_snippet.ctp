@@ -1,28 +1,4 @@
-<div class="richieste index">
-    <div class="row"> 
-        <div class="span6">
-            <h2><?php echo __('Richieste');?></h2>
-            <p> Puoi selezionare solo le richieste incomplete, oppure vedere solo quelle già completate, o tutte</p>
-            <p>
-                <a class="btn" href="/richieste/index/completa:all">Vedi tutte le richieste</a>
-                <a class="btn" href="/richieste/index/completa:0">Richieste ancora attive</a>
-                <a class="btn" href="/richieste/index/completa:1">Richieste completate</a>
-            </p>   
-            <p>
-                <?php echo $this->Html->link('Aggiungi nuova richiesta', array('controller' => 'richieste', 'action' => 'add'), array('class'=>"btn btn-info")); ?>
-
-            </p>
-        </div>
-        <div class="span3">
-            <?php 
-             //if(AuthComponent::user('role_id') < 3)     
-                echo $this->Filter->filterForm('Richiesta', array('legend' => 'Filtra'));  
-            ?>
-        </div>
-    </div>
-        
-        <?php //echo $this->Batch->create('Richiesta')?>	
-	<table class="table table-bordered table-striped" >
+<table class="table table-bordered table-striped" >
 	<tr>
 			<th>Id<?php //echo $this->Paginator->sort('id');?></th>
                         <th>Tipo<?php //echo $this->Paginator->sort('tipo_id');?>
@@ -44,10 +20,8 @@
             <?php 
             $dove = array();
             
-            foreach($richiesta['Provincia'] as $prov) {               
-                    
+            foreach($richiesta['Provincia'] as $prov) {
                     $dove[] = $this->Html->link($prov['provincia'],array('action' => 'index', 'provincia' => $prov['id']));
-                
             }
             $dove = 'Province: ' .implode(', ', $dove);            
             
@@ -167,41 +141,9 @@
         
 	</table>
         
-        <?php //echo $this->Batch->end(); ?>
         
-	<p>
-	<?php
-//	echo $this->Paginator->counter(array(
-//	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
-//	));
-	?>	
-        </p>
-
-	<div class="pagination">
-	<?php
-		echo $this->Paginator->prev('<< ' , array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ' '));
-		echo $this->Paginator->next(' >>', array(), null, array('class' => 'next disabled'));
-	?>
-	</div>
-        
-        <?php if(!empty($params)): ?>
-        <div class="row">
-            <div class="span8">
-            <?php 
-                        
-                        //debug($params);
-                        if(!empty($params))
-                            echo $this->element('show_map', array('params' => $params));
-                        
-             ?>
-            
-            </div>            
-        </div>
-        <?php endif; ?>
-</div>
+      
 
 <script>
 $('.tool-tip').tooltip()
 </script>
-

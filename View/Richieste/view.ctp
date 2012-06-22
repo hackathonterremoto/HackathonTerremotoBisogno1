@@ -1,7 +1,7 @@
 <div class="richieste view">
     <?php /* @var $this DummyView */ ?>
 <h2><?php  echo __('Richiesta');?></h2>
-<div class="row">
+    <div class="row">
         <div class="span9">
             <p><?php $this->Facebook->sendButton(); echo ' ';  ?> </p>
             <p>Inserito il:
@@ -79,6 +79,46 @@
     </div>
 
 </div>
+
+
+
+<?php if (!empty($offerte_suggerite)): ?>
+<div class="row">    
+    <div class="span4">
+        <?php if($this->Session->read('Auth.User.role_id') < 3) : ?>
+                            <?php echo $this->Html->link('Modifica', array('action' => 'edit', $richiesta['Richiesta']['id']), array('class' => 'btn')); ?>
+                            <?php echo $this->Html->link('Completa', array('action' => 'completa', $richiesta['Richiesta']['id']), array('class' => 'btn'));  ?>
+                            <?php 
+                            if($this->Session->read('Auth.User.role_id') < 2) 
+                            echo $this->Form->postLink('Elimina', array('action' => 'delete', $richiesta['Richiesta']['id']), array('class' => 'btn'), __('Are you sure you want to delete # %s?', $richiesta['Richiesta']['id'])); 
+                            ?>
+                 <?php endif; ?>
+    </div>
+    <div class="span4">
+        <p>
+            <a class="btn btn-danger" data-toggle="modal" href="#myModal" >Offerte Suggerite</a>
+        </p>
+    </div>
+</div>	
+
+<div class="modal hide" id="myModal" style="width:780px;">
+    <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal">×</button>
+    <h3>Offerta Suggerita</h3>
+    </div>
+    <div class="modal-body">
+            
+        <?php echo $this->element('offerte_index_snippet', array('offerte' => $offerte_suggerite)) ?>
+        
+    </div>
+    <div class="modal-footer">
+    <a href="#" class="btn" data-dismiss="modal">Chiudi</a>
+    </div>
+</div>
+       
+   
+<?php endif; ?>
+
     <div class="row">
         <div class="span8">
             <?php 
@@ -98,14 +138,8 @@
             
         </div>
     </div>
-		
-                  <?php if($this->Session->read('Auth.User.role_id') < 3) : ?>
-                            <?php echo $this->Html->link('Modifica', array('action' => 'edit', $richiesta['Richiesta']['id'])); ?>
-                            <?php echo $this->Html->link('Completa', array('action' => 'completa', $richiesta['Richiesta']['id']));  ?>
-                            <?php 
-                            if($this->Session->read('Auth.User.role_id') < 2) 
-                            echo $this->Form->postLink('Elimina', array('action' => 'delete', $richiesta['Richiesta']['id']), null, __('Are you sure you want to delete # %s?', $richiesta['Richiesta']['id'])); 
-                            ?>
-                 <?php endif; ?>
+
+    
+                  
 </div>
 

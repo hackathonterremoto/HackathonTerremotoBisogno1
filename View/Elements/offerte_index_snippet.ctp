@@ -1,29 +1,9 @@
-<div class="offerte index">
-    <div class="row"> 
-        <div class="span6">
-    <h2><?php if(AuthComponent::user('role_id') > 2) echo 'Le tue ';   echo __('Offerte');?></h2>
-        <p>
-            <a class="btn" href="/offerte/index/completa:all">Vedi tutte le offerte</a>
-            <a class="btn" href="/offerte/index/completa:0">Offerte ancora attive</a>
-            <a class="btn" href="/offerte/index/completa:1">Offerte completate</a>
-        </p> 
-        <p>
-            <p>
-                <?php echo $this->Html->link('Aggiungi nuova offerta', array('controller' => 'offerte', 'action' => 'add'), array('class'=>"btn btn-info")); ?>
-
-            </p>
-        </p>
-        </div>
-        <div class="span3">
-            <?php echo $this->Filter->filterForm('Offerta', array('legend' => 'Filtra'));  ?>
-        </div>
-    </div>
-	<table class="table table-bordered table-striped" >
+<table class="table table-bordered table-striped" >
 	<tr>
-			<th><?php echo $this->Paginator->sort('id');?></th>
-			<th><?php echo $this->Paginator->sort('nome');?></th>			
-			<th><?php echo $this->Paginator->sort('tipo_id');?></th>
-			<th><?php echo $this->Paginator->sort('offerta');?></th>
+			<th>id <?php //echo $this->Paginator->sort('id');?></th>
+			<th>nome <?php //echo $this->Paginator->sort('nome');?></th>			
+			<th>tipo<?php //echo $this->Paginator->sort('tipo_id');?></th>
+			<th>cosa <?php //echo $this->Paginator->sort('offerta');?></th>
                         <th>Dove</th>
                         <th></th>
 			<th class="actions"><?php echo __('Actions');?></th>
@@ -116,44 +96,18 @@
                      ?>
                 </td>
 		<td class="actions">
-			<?php echo $this->Html->link('Esamina', array('action' => 'view', $offerta['Offerta']['id']), array('class' => 'btn btn-mini')); ?>
+			<?php echo $this->Html->link('Esamina', array('controller' => 'offerte', 'action' => 'view', $offerta['Offerta']['id']), array('class' => 'btn btn-mini')); ?>
                     <?php if(AuthComponent::user('role_id') == 1 || AuthComponent::user('id') == $offerta['Offerta']['user_id']): ?>
-			<?php echo $this->Html->link('Modifica', array('action' => 'edit', $offerta['Offerta']['id']), array('class' => 'btn btn-mini')); ?>
-			<?php echo $this->Html->link('Completa', array('action' => 'completa', $offerta['Offerta']['id']), array('class' => 'btn-mini'));  ?>
+			<?php echo $this->Html->link('Modifica', array('controller' => 'offerte', 'action' => 'edit', $offerta['Offerta']['id']), array('class' => 'btn btn-mini')); ?>
+			<?php echo $this->Html->link('Completa', array('controller' => 'offerte', 'action' => 'completa', $offerta['Offerta']['id']), array('class' => 'btn-mini'));  ?>
                         <?php 
                         if(AuthComponent::user('role_id') == 1 )
-                            echo $this->Form->postLink('Elimina', array('action' => 'delete', $offerta['Offerta']['id']), array('class' => 'btn btn-mini'), __('Are you sure you want to delete # %s?', $offerta['Offerta']['id'])); ?>
+                            echo $this->Form->postLink('Elimina', array('controller' => 'offerte', 'action' => 'delete', $offerta['Offerta']['id']), array('class' => 'btn btn-mini'), __('Are you sure you want to delete # %s?', $offerta['Offerta']['id'])); ?>
                     <?php endif; ?>
                 </td>
 	</tr>
 <?php endforeach; ?>
-	</table>
-    
-	<p>
-            <?php if(empty($offerte)): ?>
-            <strong>Non ci sono tue offerte al momento. Puoi inserirne una cliccando su "Nuova offerta" nella bassa a sisnistra. 
-                Per favore, segnala solo offerte (di beni, tempo, strumenti) che puoi realmente realizzare (o, se offerte di terzi, che siano verificate)
-                <br />Per segnalare una disponibilità generica di volontariato nei prossimi mesi controlla anche sul sito
-                <a href="http://terremoto.volontariamo.com/">http://terremoto.volontariamo.com/</a>
-            </strong>
-            <?php endif; ?>
-            
-	<?php
-//	echo $this->Paginator->counter(array(
-//	'format' => __('Page {:page} of {:pages}, showing {:current} records out of {:count} total, starting on record {:start}, ending on {:end}')
-//	));
-	?>	
-        </p>
-
-	<div class="pagination">
-	<?php
-		echo $this->Paginator->prev('<< ' , array(), null, array('class' => 'prev disabled'));
-		echo $this->Paginator->numbers(array('separator' => ''));
-		echo $this->Paginator->next( ' >>', array(), null, array('class' => 'next disabled'));
-	?>
-	</div>
-</div>
-
+</table>
 
 <script>
 $('.tool-tip').tooltip()
