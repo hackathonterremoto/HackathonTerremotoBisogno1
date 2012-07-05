@@ -106,7 +106,9 @@ class RichiesteController extends AppController {
             $from = array($this->request->data['Richiesta']['tua_email'] => $this->request->data['Richiesta']['tua_email']);
             if (empty($this->request->data['Richiesta']['tua_email']))
                 $email->from = array('noreply@serveaiuto.org' => 'Mail dal sito');
+            
             $to = array($richiesta['Richiesta']['email'] => $richiesta['Richiesta']['email']);
+            
             $ccn = array($richiesta['User']['email'] => $richiesta['User']['email'], 'promozione@csvferrara.it' => 'promozione@csvferrara.it');
 
             $subject = 'Risposta a: ' . $richiesta['Richiesta']['cosa_serve'];
@@ -260,14 +262,38 @@ class RichiesteController extends AppController {
         $this->view($id);
     }
     
+    /**
+     * get suggested offers for this request (based on tags, words, whole text matches)
+     * 
+     * @param type $richiesta
+     * @return type 
+     */
     public function suggerisci($richiesta) {
         if(is_numeric($richiesta)) {
             $richiesta = $this->Richiesta->read(null, $richiesta);
         }
         
-        
         $offerte_suggerite  = $this->Richiesta->User->Offerta->suggerisci_offerte($richiesta);
+        $offerte_top = array();
+        
+        //move "top" matches (those based on tags first) on a different array
+        foreach ($offerte_suggerite as $oid => $offerta) {
+            
+            if(substr($oid,0,1) == '3' || substr($oid,0,1) == '4') {
+                $offerte_top[$oid] = $offerta;
+                unset ($offerte_suggerite[$oid]); 
+            }
+        }
+        
+        
+        //debug ($offerte_top);
+        if(!empty($offerte_top)) 
+                $this->set('offerte_top', $offerte_top);
+        
         if($this->request->params['action'] == 'suggerisci') {
+            
+            
+            debug($offerte_top);
             $this->set('offerte_suggerite', $offerte_suggerite);
             $this->set('richiesta', $richiesta);
         } else {

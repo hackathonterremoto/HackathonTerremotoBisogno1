@@ -24,14 +24,14 @@
         <?php //echo $this->Batch->create('Richiesta')?>	
 	<table class="table table-bordered table-striped" >
 	<tr>
-			<th>Id<?php //echo $this->Paginator->sort('id');?></th>
+			<th><?php echo $this->Paginator->sort('id');?></th>
                         <th>Tipo<?php //echo $this->Paginator->sort('tipo_id');?>
-                            <br/>scadenza indicativa<?php //echo $this->Paginator->sort('scadenza', 'scadenza indicativa');?></th>
+                            <br/><?php echo $this->Paginator->sort('scadenza', 'scadenza indicativa');?></th>
 			<th>Cosa serve<?php //echo $this->Paginator->sort('cosa_serve');?></th>			
 			<th>Dove, a chi<?php //echo $this->Paginator->sort('dove_a_chi', 'dove, a chi');?></th>			
                         <?php if($this->Session->read('Auth.User.role_id') < 3 ) : ?>
                             <th>Inserimento, <?php //echo $this->Paginator->sort('created', 'inserimento');?><br/>
-                            Ultima modifica<?php //echo $this->Paginator->sort('modified', 'ultima modifica');?>, inserito da<?php //echo $this->Paginator->sort('user_id');?>
+                            <?php echo $this->Paginator->sort('modified', 'ultima modifica');?>, inserito da<?php //echo $this->Paginator->sort('user_id');?>
                             </th>
                             <th></th>
 			<?php endif; ?>			
@@ -70,7 +70,19 @@
             ?>
             
 	<tr>
-		<td><?php echo h($richiesta['Richiesta']['id']); ?>&nbsp;</td>
+		<td>
+                    <?php echo h($richiesta['Richiesta']['id']); ?><br />
+                    <?php 
+                    if($richiesta['Richiesta']['verificata']) 
+                        echo $this->Html->image('verificato.png', array('title' => 'richiesta verificata', 'alt' => 'richiesta verificata'));
+                    if($richiesta['Richiesta']['in_evidenza']) 
+                        echo $this->Html->image('in_evidenza.png', array('title' => 'richiesta in evidenza', 'alt' => 'richiesta in evidenza'));
+                    if($richiesta['Richiesta']['pubblica']) 
+                        echo $this->Html->image('pubblica.png', array('title' => 'richiesta pubblica (visibile con dettagli a utenti registrati)', 'alt' => 'richiesta pubblica (visibile con dettagli a utenti registrati)'));
+                     if($richiesta['Richiesta']['segnala_in_indice_sito']) 
+                        echo $this->Html->image('segnala.png', array('title' => 'richiesta esportabile (il "cosa" appare nella lista di necessità per provincia che può essere visualizzata su altri siti)', 'alt' => 'richiesta esportabile (il "cosa" appare nella lista di necessità per provincia che può essere visualizzata su altri siti)'));
+                    ?>
+                </td>
                 <td>
 			<?php echo $this->Html->link($richiesta['Tipo']['nome'], array('controller' => 'richieste', 'action' => 'index', 'tipo' => $richiesta['Tipo']['id'])); ?>
                     <br/>
@@ -93,16 +105,8 @@
                 </td>
 		<td>
                     <strong>
-                    <?php 
-                    if($richiesta['Richiesta']['verificata']) 
-                        echo $this->Html->image('verificato.png', array('title' => 'richiesta verificata', 'alt' => 'richiesta verificata'));
-                    if($richiesta['Richiesta']['in_evidenza']) 
-                        echo $this->Html->image('in_evidenza.png', array('title' => 'richiesta in evidenza', 'alt' => 'richiesta in evidenza'));
-                    if($richiesta['Richiesta']['pubblica']) 
-                        echo $this->Html->image('pubblica.png', array('title' => 'richiesta pubblica (visibile con dettagli a utenti registrati)', 'alt' => 'richiesta pubblica (visibile con dettagli a utenti registrati)'));
-                     if($richiesta['Richiesta']['segnala_in_indice_sito']) 
-                        echo $this->Html->image('segnala.png', array('title' => 'richiesta esportabile (il "cosa" appare nella lista di necessità per provincia che può essere visualizzata su altri siti)', 'alt' => 'richiesta esportabile (il "cosa" appare nella lista di necessità per provincia che può essere visualizzata su altri siti)'));
                     
+                    <?php
                     echo ' ';
                     if($richiesta['Richiesta']['completa']) {
                         echo '<strike>'. h($richiesta['Richiesta']['cosa_serve']).'</strike>'; 
@@ -112,7 +116,8 @@
                     ?>
                     </strong>
                     <br />
-                            [<?php echo $richiesta['Categoria']['categoria']; ?>]
+                    
+                            [<?php  echo $this->Html->link( $richiesta['Categoria']['categoria'], array('controller' => 'richieste', 'action' => 'index', 'categoria' => $richiesta['Categoria']['id'])); ?>]
                      
                 </td>		
 		<td>
@@ -136,7 +141,7 @@
                  <?php
                     $mostra = $richiesta['User']['username'];
                     if($this->Session->read('Auth.User.role_id') > 1) $mostra = 'Utente numero '. $richiesta['User']['id'];
-                    echo $this->Html->link($mostra, array('controller' => 'richieste', 'action' => 'index', $richiesta['User']['id'])); ?>
+                    echo $this->Html->link($mostra, array('controller' => 'richieste', 'action' => 'index', 'user' => $richiesta['User']['id'])); ?>
 		</td>
                 
                 <td>                    
